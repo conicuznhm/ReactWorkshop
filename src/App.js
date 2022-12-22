@@ -29,16 +29,24 @@ function App() {
   // action when 'input' change by user
   const handleInputChange = (e) => setItem(e.target.value);
 
-  // action when click 'Delete button
+  // action when click 'Delete' button
   const handleDelteItem = idToDelete => {
     const newItems = items.filter(item => item.id !== idToDelete);
     setItems(newItems);
   }
 
+  // action when click 'Done' button
+  const handleUpdate = (idxToUpdate) => {
+    const tempArr = [...items]
+    tempArr.splice(idxToUpdate, 1, Object.assign({}, tempArr[idxToUpdate], {title: item})) 
+    setItems(tempArr)
+    setItem('');
+  }
+
   return (
     <div style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo item={item} onChange={handleInputChange} onClickAdd={handleAddItem} onClickReset={handleResetItem} />
-      <ListItems items={items} onClickDelete={handleDelteItem} />
+      <ListItems items={items} onClickDelete={handleDelteItem} onChange={handleInputChange} onUpdate={handleUpdate} />
     </div>
   );
 }

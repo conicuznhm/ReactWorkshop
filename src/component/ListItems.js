@@ -1,10 +1,18 @@
 import Item from "./Item";
-import { v4 as uuidv4 } from 'uuid';
 
-const ListItems = ({ items, onClickDelete }) => {
+const ListItems = ({ items, onClickDelete, onChange, onUpdate }) => {
     return (
         <div>
-            {items.map(item => <Item key={item.id} item={item.title} completed={item.completed} id={item.id} onClick={onClickDelete} />)}
+            {items.map((item, idx) => <Item
+                key={item.id}
+                item={item.title}
+                completed={item.completed}
+                id={item.id}
+                onClick={onClickDelete}
+                onChange={onChange}
+                onUpdate={onUpdate}
+                idx={idx}
+            />)}
         </div>
     );
 }
