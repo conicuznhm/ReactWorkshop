@@ -5,20 +5,20 @@ import ListItems from './component/ListItems';
 import { useState } from 'react';
 
 function App() {
-
+  // defaul data
   const DefaultItems = [
-    { id: uuidv4(), title: 'input 3', completed: false },
-    { id: uuidv4(), title: 'input 2', completed: false },
-    { id: uuidv4(), title: 'input 1', completed: false }
+    { id: uuidv4(), title: 'FreeCodeCamp Javascript', completed: false },
+    { id: uuidv4(), title: 'FreeCodeCamp HTML', completed: false },
+    { id: uuidv4(), title: 'FreeCodeCamp CSS', completed: false }
   ];
 
   // state declaration
   const [items, setItems] = useState(DefaultItems);     // for data base
   const [item, setItem] = useState('');                 // for input data
-  const [editItem, setEditItem] = useState('');         // for edit data
 
-  // for <InputToDo /> --------------------------------------------------------------------------
-  // --------------------------------------------------------------------------------------------  
+  // -----------------------------  
+  // --    for <InputToDo />    --
+  // -----------------------------  
   // action when user click 'Add' button
   const handleAddItem = () => {
     const tempArr = [...items];
@@ -30,25 +30,24 @@ function App() {
   const handleResetItem = () => setItem('');
   // action when 'input' changed by user
   const handleInputChange = (e) => setItem(e.target.value);
+  // --------------------------------------------------------------------------------------------  
 
-
-  // for <ListItems /> --------------------------------------------------------------------------
-  // --------------------------------------------------------------------------------------------
+  // -----------------------------  
+  // --    for <ListItems />    --
+  // -----------------------------
   // display mode ---- action when click 'Delete' button
   const handleDelte = idToDelete => {
     const newItems = items.filter(item => item.id !== idToDelete);
     setItems(newItems);
   }
   // edit mode --- action when click 'Done' button
-  const handleClickUpdateItems = (idxToUpdate, handlerIsEdit) => {
+  const handleClickUpdateItems = (idxToUpdate, editItem, handlerIsEdit) => {
     const tempArr = [...items];                                                   // clone [items] array
     const newObj = Object.assign({}, tempArr[idxToUpdate], { title: editItem })   // create new object with 'editItem'
     tempArr.splice(idxToUpdate, 1, newObj);                                       // substitute tempArr[idxToUpdate] with {newObj}
     setItems(tempArr);                                                            // update [items] with [tempArr]
     handlerIsEdit();                                                              // toggle isEdit status <----------- function from <Item />
   }
-  // edit mode --- action when 'item' edited by user
-  const handleEditItem = (e) => setEditItem(e.target.value);
   // --------------------------------------------------------------------------------------------
 
   return (
@@ -62,9 +61,8 @@ function App() {
 
       <ListItems
         items={items}
-        onChange={handleEditItem}
-        onClickUpdateItem={handleClickUpdateItems}
         onClickDelete={handleDelte}
+        onClickUpdateItem={handleClickUpdateItems}
       />
     </div>
   );
