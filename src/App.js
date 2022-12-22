@@ -1,25 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import { v4 as uuidv4 } from 'uuid';
+import InputToDo from './component/InputToDo';
+import ListItems from './component/ListItems';
+import { useState } from 'react';
 
 function App() {
+
+  const DefaultItems = [
+    { id: uuidv4(), title: 'input 3', completed: false },
+    { id: uuidv4(), title: 'input 2', completed: false },
+    { id: uuidv4(), title: 'input 1', completed: false }
+  ];
+
+  const [items, setItems] = useState(DefaultItems);
+  const [item, setItem] = useState('');
+
+  // action when click 'Add' button
+  const handleAddItem = () => {
+    const tempArr = [...items];
+    tempArr.unshift({ id: uuidv4(), title: item, completed: false });
+    setItems(tempArr);
+    setItem('');
+  };
+
+  // action when click 'Reset' button
+  const handleResetItem = () => setItem('');
+
+  // action when 'input' change by user
+  const handleInputChange = (e) => setItem(e.target.value);
+
   return (
-    <button className='btn btn-danger'><i className='fa-solid fa-check' /></button>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
+    <div style={{ width: '80%', margin: '50px auto' }}>
+      <InputToDo item={item} onChange={handleInputChange} onClickAdd={handleAddItem} onClickReset={handleResetItem} />
+      <ListItems items={items} />
+    </div>
   );
 }
 
