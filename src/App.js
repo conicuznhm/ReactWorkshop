@@ -29,10 +29,16 @@ function App() {
   // action when 'input' change by user
   const handleInputChange = (e) => setItem(e.target.value);
 
+  // action when click 'Delete button
+  const handleDelteItem = idToDelete => {
+    const newItems = items.filter(item => item.id !== idToDelete);
+    setItems(newItems);
+  }
+
   return (
     <div style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo item={item} onChange={handleInputChange} onClickAdd={handleAddItem} onClickReset={handleResetItem} />
-      <ListItems items={items} />
+      <ListItems items={items} onClickDelete={handleDelteItem} />
     </div>
   );
 }

@@ -1,11 +1,16 @@
-const Item = ({item}) => {
+import { useState } from "react";
+
+const Item = ({ item, completed, id, onClick }) => {
+    const [isDone, setIsDone] = useState(completed);
+
+    const handleIsDone = () => setIsDone(!isDone);
+
     return (
         <div className="input-group">
-            <input type='text' className="form-control" />
-            <button className="btn btn-outline-secondary" >Add</button>
-            <button type="reset" className="btn btn-outline-secondary" >Reset</button>
+            <div className="form-control" style={{ backgroundColor: isDone ? '#14A44D' : '#DC4C64' }}>{item}</div>
+            <button className="btn btn-outline-secondary" onClick={handleIsDone} >Done</button>
+            <button type="reset" className="btn btn-outline-secondary" onClick={() => onClick(id)} >Delete</button>
         </div>
-
     );
 }
 export default Item;
