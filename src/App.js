@@ -12,41 +12,60 @@ function App() {
     { id: uuidv4(), title: 'input 1', completed: false }
   ];
 
-  const [items, setItems] = useState(DefaultItems);
-  const [item, setItem] = useState('');
+  // state declaration
+  const [items, setItems] = useState(DefaultItems);     // for data base
+  const [item, setItem] = useState('');                 // for input data
+  const [editItem, setEditItem] = useState('');         // for edit data
 
-  // action when click 'Add' button
+  // for <InputToDo /> --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------------------  
+  // action when user click 'Add' button
   const handleAddItem = () => {
     const tempArr = [...items];
     tempArr.unshift({ id: uuidv4(), title: item, completed: false });
     setItems(tempArr);
     setItem('');
   };
-
-  // action when click 'Reset' button
+  // action when user click 'Reset' button
   const handleResetItem = () => setItem('');
-
-  // action when 'input' change by user
+  // action when 'input' changed by user
   const handleInputChange = (e) => setItem(e.target.value);
 
-  // action when click 'Delete' button
-  const handleDelteItem = idToDelete => {
+
+  // for <ListItems /> --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------------------
+  // display mode ---- action when click 'Delete' button
+  const handleDelte = idToDelete => {
     const newItems = items.filter(item => item.id !== idToDelete);
     setItems(newItems);
   }
-
-  // action when click 'Done' button
-  const handleUpdate = (idxToUpdate) => {
-    const tempArr = [...items]
-    tempArr.splice(idxToUpdate, 1, Object.assign({}, tempArr[idxToUpdate], {title: item})) 
-    setItems(tempArr)
-    setItem('');
+  // edit mode --- action when click 'Done' button
+  const handleClickUpdateItems = (idxToUpdate, handlerIsEdit) => {
+    const tempArr = [...items];                                                   // clone [items] array
+    const newObj = Object.assign({}, tempArr[idxToUpdate], { title: editItem })   // create new object with 'editItem'
+    tempArr.splice(idxToUpdate, 1, newObj);                                       // substitute tempArr[idxToUpdate] with {newObj}
+    setItems(tempArr);                                                            // update [items] with [tempArr]
+    handlerIsEdit();                                                              // toggle isEdit status <----------- function from <Item />
   }
+  // edit mode --- action when 'item' edited by user
+  const handleEditItem = (e) => setEditItem(e.target.value);
+  // --------------------------------------------------------------------------------------------
 
   return (
     <div style={{ width: '80%', margin: '50px auto' }}>
-      <InputToDo item={item} onChange={handleInputChange} onClickAdd={handleAddItem} onClickReset={handleResetItem} />
-      <ListItems items={items} onClickDelete={handleDelteItem} onChange={handleInputChange} onUpdate={handleUpdate} />
+      <InputToDo
+        item={item}
+        onChange={handleInputChange}
+        onClickAdd={handleAddItem}
+        onClickReset={handleResetItem}
+      />
+
+      <ListItems
+        items={items}
+        onChange={handleEditItem}
+        onClickUpdateItem={handleClickUpdateItems}
+        onClickDelete={handleDelte}
+      />
     </div>
   );
 }

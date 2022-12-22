@@ -1,29 +1,30 @@
 import { useState } from "react";
 
-const Item = ({ item, completed, id, onClick, onChange, onUpdate, idx }) => {
-    const [isDone, setIsDone] = useState(completed);
+const Item = ({ item, idx, onChange, onClickDelete, onClickUpdateItem }) => {
+    const [isDoneItem, setIsDoneItem] = useState(item.completed);
     const [isEdit, setIsEdit] = useState(false);
 
-    // action when click 'Done' button
-    const handleIsDone = () => setIsDone(!isDone);
+    // toggle between green and red (click on change button)
+    const handleIsDoneItem = () => setIsDoneItem(!isDoneItem);
+    const statusColor = isDoneItem ? '#14A44D' : '#DC4C64';
 
-    // action when click on each item
-    const handlerIsEdit = (e) => {
-        console.log(isEdit);
-        console.log(e);
-        setIsEdit(!isEdit);
-    }
+    // toggle between display and edit mode
+    // ----- 1. happen when click on 'item' in display mode         <-- happen inside this component
+    // ----- 2. happen when click on 'Done' button in edit mode     <-- happen outside (from App.js)
+    const handlerIsEdit = (e) => setIsEdit(!isEdit);
 
+    // item: display mode
     const displayItemMode = <div className="input-group">
-        <div className="form-control" onClick={handlerIsEdit} style={{ backgroundColor: isDone ? '#14A44D' : '#DC4C64' }}>{item}</div>
-        <button className="btn btn-outline-secondary" onClick={handleIsDone} >Change</button>
-        <button type="reset" className="btn btn-outline-secondary" onClick={() => onClick(id)} >Delete</button>
+        <div className="form-control" onClick={handlerIsEdit} style={{ backgroundColor: statusColor }}>{item.title}</div>
+        <button className="btn btn-outline-secondary" onClick={handleIsDoneItem} >Change</button>
+        <button className="btn btn-outline-secondary" onClick={() => onClickDelete(item.id)} >Delete</button>
     </div>
 
+    // item: edit mode
     const editItemMode = <div className="input-group">
-        <input className="form-control" type='text' onChange={onChange} defaultValue={item} />
-        <button className="btn btn-outline-secondary" onClick={() => onUpdate(idx)} >Done</button>
-        <button type="reset" className="btn btn-outline-secondary" onClick={() => onClick(id)} >Cancel</button>
+        <input className="form-control" onChange={onChange} defaultValue={item.title} />
+        <button className="btn btn-outline-secondary" onClick={() => onClickUpdateItem(idx, handlerIsEdit)} >Done</button>
+        <button className="btn btn-outline-secondary" onClick={handlerIsEdit} >Cancel</button>
     </div>
 
     return (

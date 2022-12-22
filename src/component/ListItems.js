@@ -1,17 +1,16 @@
 import Item from "./Item";
 
-const ListItems = ({ items, onClickDelete, onChange, onUpdate }) => {
+const ListItems = ({ items, onChange, onClickDelete, onClickUpdateItem }) => {
     return (
         <div>
             {items.map((item, idx) => <Item
                 key={item.id}
-                item={item.title}
-                completed={item.completed}
-                id={item.id}
-                onClick={onClickDelete}
-                onChange={onChange}
-                onUpdate={onUpdate}
+                item={item}
                 idx={idx}
+
+                onChange={onChange}
+                onClickUpdateItem={onClickUpdateItem}
+                onClickDelete={onClickDelete}
             />)}
         </div>
     );
