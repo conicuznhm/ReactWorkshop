@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Item = ({ idx, item, onClickDelete, onClickUpdateItem }) => {
+const Item = ({ item, onClickDelete, onClickUpdateItem }) => {
     const [isEdit, setIsEdit] = useState(false);                        // for toggling between display and edit mode
     const [editItem, setEditItem] = useState(item.title);               // for edit data
 
@@ -21,18 +21,24 @@ const Item = ({ idx, item, onClickDelete, onClickUpdateItem }) => {
         handlerIsEdit();
     }
 
+    // action when click confirm on edit mode
+    const handleUpdateFromEdit = () => {
+        onClickUpdateItem(item.id, {title: editItem});
+        handlerIsEdit();
+    }
+
     // item: display mode
     const displayItemMode = <div className="input-group">
         <div className={`form-control text-bg-${statusColor}`} onClick={handlerIsEdit} >{item.title}</div>
-        <button className="btn btn-outline-secondary" onClick={() => onClickUpdateItem(idx, !item.completed, 'completed', handlerIsEdit)} >Change</button>
+        <button className="btn btn-outline-secondary" onClick={() => onClickUpdateItem(item.id, {completed: !item.completed})} >Change</button>
         <button className="btn btn-outline-secondary" onClick={() => onClickDelete(item.id)} >Delete</button>
     </div>
 
     // item: edit mode
     const editItemMode = <div className="input-group">
         <input className="form-control" onChange={handleEditItem} value={editItem} />
-        <button className="btn btn-outline-secondary" onClick={() => onClickUpdateItem(idx, editItem, 'title', handlerIsEdit)} ><i className="fa-solid fa-check" /></button>
-        <button className="btn btn-outline-secondary" onClick={hadleCancelItem} >Cancel</button>
+        <button className="btn btn-outline-secondary" onClick={handleUpdateFromEdit} ><i className="fa-solid fa-check" /></button>
+        <button className="btn btn-outline-secondary" onClick={hadleCancelItem} ><i className="fa-solid fa-xmark" /></button>
     </div>
 
     return (

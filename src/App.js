@@ -33,13 +33,13 @@ function App() {
     setItems(newItems);
   }
   // edit mode --- action when click 'Done' or 'Change' button
-  const handleClickUpdateItems = (idxToUpdate, editItem, keyToUpdate, handlerIsEdit) => {
-    const tempArr = [...items];                                                               // clone [items] array
-    const newObj = Object.assign({}, tempArr[idxToUpdate], { [keyToUpdate]: editItem })       // create new object with 'editItem'
-    tempArr.splice(idxToUpdate, 1, newObj);                                                   // substitute tempArr[idxToUpdate] with {newObj}
-    setItems(tempArr);                                                                        // update [items] with [tempArr]
-
-    if (keyToUpdate === 'title') handlerIsEdit();                                             // toggle isEdit status <----------- function from <Item />
+  const handleUpdateItem = (id, updateValue) => {
+    const idx = items.findIndex(item => item.id === id);
+    const tempArr = [...items];                                       // clone [items] array
+    // const newObj = Object.assign({}, tempArr[idx], updateValue)       // create new object with 'editItem'
+    // tempArr.splice(idx, 1, newObj);                                   // substitute tempArr[idxToUpdate] with {newObj}
+    tempArr[idx] = {...tempArr[idx], ...updateValue}                  // merge object, the right one will replace if have same key
+    setItems(tempArr);                                                // update [items] with [tempArr]
   }
   // --------------------------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ function App() {
       <ListItems
         items={items}
         onClickDelete={handleDelteItem}
-        onClickUpdateItem={handleClickUpdateItems}
+        onClickUpdateItem={handleUpdateItem}
       />
     </div>
   );

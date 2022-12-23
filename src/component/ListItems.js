@@ -3,10 +3,8 @@ import Item from "./Item";
 const ListItems = ({ items, onClickDelete, onClickUpdateItem }) => {
     return (
         <div>
-            {items.map((item, idx) => <Item
+            {items.map(item => <Item
                 key={item.id}
-
-                idx={idx}
                 item={item}
                 onClickDelete={onClickDelete}
                 onClickUpdateItem={onClickUpdateItem}
