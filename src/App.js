@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import InputToDo from './component/InputToDo';
 import ListItems from './component/ListItems';
+import SearchForm from './component/SearchForm';
 
 function App() {
   // defaul data
@@ -14,13 +15,20 @@ function App() {
 
   // state declaration
   const [items, setItems] = useState(DefaultItems);     // for database
+  const [showItems, setShowItems] = useState(items);     // for database
+
+  // to update both state together
+  const setAllState = (value) => {
+    setItems(value);
+    setShowItems(value);
+  }
 
   // -----------------------------  
   // --    for <InputToDo />    --
   // -----------------------------
   const handleAddItem = (title) => {
     const nItem = { id: uuidv4(), title, completed: false }   // tile: tile === tile (short hand)
-    setItems([nItem, ...items]);
+    setAllState([nItem, ...items]);
   }
   // --------------------------------------------------------------------------------------------
 
@@ -30,27 +38,36 @@ function App() {
   // display mode ---- action when click 'Delete' button
   const handleDelteItem = idToDelete => {
     const newItems = items.filter(item => item.id !== idToDelete);
-    setItems(newItems);
+    setAllState(newItems);
   }
   // edit mode --- action when click 'Done' or 'Change' button
   const handleUpdateItem = (id, updateValue) => {
     const idx = items.findIndex(item => item.id === id);
     const tempArr = [...items];                                       // clone [items] array
-    // const newObj = Object.assign({}, tempArr[idx], updateValue)       // create new object with 'editItem'
-    // tempArr.splice(idx, 1, newObj);                                   // substitute tempArr[idxToUpdate] with {newObj}
-    tempArr[idx] = {...tempArr[idx], ...updateValue}                  // merge object, the right one will replace if have same key
-    setItems(tempArr);                                                // update [items] with [tempArr]
+    tempArr[idx] = {...tempArr[idx], ...updateValue};                 // merge object, the right one will replace if have same key
+    setAllState(tempArr);                                                // update [items] with [tempArr]
+  }
+  // --------------------------------------------------------------------------------------------
+
+  // ------------------------------ 
+  // --    for <SearchForm />    --
+  // ------------------------------
+  const handleSearchItem = search => {
+    const searchItems = items.filter(item => item.title.toLowerCase().includes(search.toLowerCase()));
+    setShowItems(searchItems);
   }
   // --------------------------------------------------------------------------------------------
 
   return (
     <div className='container' style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo handleAddItem={handleAddItem} />
+      <br />
+      <SearchForm onChange={handleSearchItem}/>
 
       <br />
 
       <ListItems
-        items={items}
+        items={showItems}
         onClickDelete={handleDelteItem}
         onClickUpdateItem={handleUpdateItem}
       />
