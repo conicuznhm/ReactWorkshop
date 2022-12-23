@@ -43,9 +43,15 @@ function App() {
   // edit mode --- action when click 'Done' or 'Change' button
   const handleUpdateItem = (id, updateValue) => {
     const idx = items.findIndex(item => item.id === id);
-    const tempArr = [...items];                                       // clone [items] array
-    tempArr[idx] = {...tempArr[idx], ...updateValue};                 // merge object, the right one will replace if have same key
-    setAllState(tempArr);                                                // update [items] with [tempArr]
+    const tempArr = [...items];                                           // clone [items] array
+    tempArr[idx] = {...tempArr[idx], ...updateValue};                     // merge object, the right one will replace if have same key
+
+    const idxShow = showItems.findIndex(item => item.id === id);
+    const tempArrShow = [...showItems];                                  // clone [showItems] array
+    tempArrShow[idxShow] = {...tempArrShow[idxShow], ...updateValue};    // merge object, the right one will replace if have same key
+    
+    setItems(tempArr);                                                   // update [items] with [tempArr]
+    setShowItems(tempArrShow);                                           // update [showItems] with [tempArrShow]
   }
   // --------------------------------------------------------------------------------------------
 
