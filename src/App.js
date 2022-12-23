@@ -9,7 +9,7 @@ function App() {
   const DefaultItems = [
     { id: uuidv4(), title: 'FreeCodeCamp Javascript', completed: false },
     { id: uuidv4(), title: 'FreeCodeCamp HTML', completed: false },
-    { id: uuidv4(), title: 'FreeCodeCamp CSS', completed: false }
+    { id: uuidv4(), title: 'FreeCodeCamp CSS', completed: true }
   ];
 
   // state declaration
@@ -40,6 +40,8 @@ function App() {
         items={items}
         setItems={setItems}
       />
+
+      <br />
 
       <ListItems
         items={items}

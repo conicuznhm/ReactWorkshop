@@ -5,7 +5,7 @@ const ListItems = ({ items, onClickDelete, onClickUpdateItem }) => {
         <div>
             {items.map((item, idx) => <Item
                 key={item.id}
-                
+
                 idx={idx}
                 item={item}
                 onClickDelete={onClickDelete}
