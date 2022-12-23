@@ -14,23 +14,6 @@ function App() {
 
   // state declaration
   const [items, setItems] = useState(DefaultItems);     // for database
-  const [item, setItem] = useState('');                 // for input data
-
-  // -----------------------------  
-  // --    for <InputToDo />    --
-  // -----------------------------  
-  // action when user click 'Add' button
-  const handleAddItem = () => {
-    const tempArr = [...items];
-    tempArr.unshift({ id: uuidv4(), title: item, completed: false });
-    setItems(tempArr);
-    setItem('');
-  };
-  // action when user click 'Reset' button
-  const handleResetItem = () => setItem('');
-  // action when 'input' changed by user
-  const handleInputChange = (e) => setItem(e.target.value);
-  // --------------------------------------------------------------------------------------------  
 
   // -----------------------------  
   // --    for <ListItems />    --
@@ -53,10 +36,8 @@ function App() {
   return (
     <div style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo
-        item={item}
-        onChange={handleInputChange}
-        onClickAdd={handleAddItem}
-        onClickReset={handleResetItem}
+        items={items}
+        setItems={setItems}
       />
 
       <ListItems
