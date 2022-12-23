@@ -23,21 +23,27 @@ const Item = ({ item, onClickDelete, onClickUpdateItem }) => {
 
     // action when click confirm on edit mode
     const handleUpdateFromEdit = () => {
-        onClickUpdateItem(item.id, {title: editItem});
+        onClickUpdateItem(item.id, { title: editItem });
         handlerIsEdit();
     }
 
     // item: display mode
-    const displayItemMode = <div className="input-group">
-        <div className={`form-control text-bg-${statusColor}`} onClick={handlerIsEdit} >{item.title}</div>
-        <button className="btn btn-outline-secondary" onClick={() => onClickUpdateItem(item.id, {completed: !item.completed})} >Change</button>
-        <button className="btn btn-outline-secondary" onClick={() => onClickDelete(item.id)} >Delete</button>
+    const displayItemMode = <div className={`list-group-item d-flex align-items-center w-100 text-bg-${statusColor}`}>
+        <div className="flex-fill" onClick={handlerIsEdit} role='button' >{item.title}</div>
+        <div className="btn-group">
+            <button className="btn btn-outline-light" onClick={() => onClickUpdateItem(item.id, { completed: !item.completed })} >
+                <i className="fa-solid fa-repeat" />
+            </button>
+            <button className="btn btn-outline-light" onClick={() => onClickDelete(item.id)} >
+                <i className="fa-regular fa-trash-can" />
+            </button>
+        </div>
     </div>
 
     // item: edit mode
-    const editItemMode = <div className="input-group">
+    const editItemMode = <div className="input-group list-group-item d-flex">
         <input className="form-control" onChange={handleEditItem} value={editItem} />
-        <button className="btn btn-outline-secondary" onClick={handleUpdateFromEdit} ><i className="fa-solid fa-check" /></button>
+        <button className="btn btn-primary" onClick={handleUpdateFromEdit} ><i className="fa-solid fa-check" /></button>
         <button className="btn btn-outline-secondary" onClick={hadleCancelItem} ><i className="fa-solid fa-xmark" /></button>
     </div>
 

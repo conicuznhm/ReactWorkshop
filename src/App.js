@@ -44,7 +44,7 @@ function App() {
   // --------------------------------------------------------------------------------------------
 
   return (
-    <div style={{ width: '80%', margin: '50px auto' }}>
+    <div className='container' style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo handleAddItem={handleAddItem} />
 
       <br />
