@@ -28,7 +28,7 @@ const Item = ({ item, onClickDelete, onClickUpdateItem }) => {
     }
 
     // item: display mode
-    const displayItemMode = <div className={`list-group-item d-flex align-items-center w-100 text-bg-${statusColor}`}>
+    const displayItemMode = <div className="d-flex align-items-center">
         <div className="flex-fill" onClick={handlerIsEdit} role='button' >{item.title}</div>
         <div className="btn-group">
             <button className="btn btn-outline-light" onClick={() => onClickUpdateItem(item.id, { completed: !item.completed })} >
@@ -48,7 +48,7 @@ const Item = ({ item, onClickDelete, onClickUpdateItem }) => {
     </div>
 
     return (
-        <div className="input-group">
+        <div className={`${ !isEdit ? 'list-group-item  text-bg-' + statusColor : ''}`}>
             {isEdit ? editItemMode : displayItemMode}
         </div>
     );
