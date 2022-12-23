@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import InputToDo from './component/InputToDo';
 import ListItems from './component/ListItems';
 import SearchForm from './component/SearchForm';
+import FilterStatus from './component/FilterStatus';
 
 function App() {
   // defaul data
@@ -15,7 +16,7 @@ function App() {
 
   // state declaration
   const [items, setItems] = useState(DefaultItems);     // for database
-  const [showItems, setShowItems] = useState(items);     // for database
+  const [showItems, setShowItems] = useState(items);    // for database
 
   // to update both state together
   const setAllState = (value) => {
@@ -43,15 +44,15 @@ function App() {
   // edit mode --- action when click 'Done' or 'Change' button
   const handleUpdateItem = (id, updateValue) => {
     const idx = items.findIndex(item => item.id === id);
-    const tempArr = [...items];                                           // clone [items] array
-    tempArr[idx] = {...tempArr[idx], ...updateValue};                     // merge object, the right one will replace if have same key
+    const tempArr = [...items];                                             // clone [items] array
+    tempArr[idx] = { ...tempArr[idx], ...updateValue };                     // merge object, the right one will replace if have same key
 
     const idxShow = showItems.findIndex(item => item.id === id);
-    const tempArrShow = [...showItems];                                  // clone [showItems] array
-    tempArrShow[idxShow] = {...tempArrShow[idxShow], ...updateValue};    // merge object, the right one will replace if have same key
-    
-    setItems(tempArr);                                                   // update [items] with [tempArr]
-    setShowItems(tempArrShow);                                           // update [showItems] with [tempArrShow]
+    const tempArrShow = [...showItems];                                     // clone [showItems] array
+    tempArrShow[idxShow] = { ...tempArrShow[idxShow], ...updateValue };     // merge object, the right one will replace if have same key
+
+    setItems(tempArr);                                                      // update [items] with [tempArr]
+    setShowItems(tempArrShow);                                              // update [showItems] with [tempArrShow]
   }
   // --------------------------------------------------------------------------------------------
 
@@ -68,8 +69,10 @@ function App() {
     <div className='container' style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo handleAddItem={handleAddItem} />
       <br />
-      <SearchForm onChange={handleSearchItem}/>
-
+      <SearchForm onChange={handleSearchItem} />
+      <br />
+      <FilterStatus />
+      <br />
       <br />
 
       <ListItems
