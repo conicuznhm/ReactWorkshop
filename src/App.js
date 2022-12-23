@@ -16,10 +16,19 @@ function App() {
   const [items, setItems] = useState(DefaultItems);     // for database
 
   // -----------------------------  
+  // --    for <InputToDo />    --
+  // -----------------------------
+  const handleAddItem = (title) => {
+    const nItem = { id: uuidv4(), title, completed: false }   // tile: tile === tile (short hand)
+    setItems([nItem, ...items]);
+  }
+  // --------------------------------------------------------------------------------------------
+
+  // -----------------------------  
   // --    for <ListItems />    --
   // -----------------------------
   // display mode ---- action when click 'Delete' button
-  const handleDelte = idToDelete => {
+  const handleDelteItem = idToDelete => {
     const newItems = items.filter(item => item.id !== idToDelete);
     setItems(newItems);
   }
@@ -36,16 +45,13 @@ function App() {
 
   return (
     <div style={{ width: '80%', margin: '50px auto' }}>
-      <InputToDo
-        items={items}
-        setItems={setItems}
-      />
+      <InputToDo handleAddItem={handleAddItem} />
 
       <br />
 
       <ListItems
         items={items}
-        onClickDelete={handleDelte}
+        onClickDelete={handleDelteItem}
         onClickUpdateItem={handleClickUpdateItems}
       />
     </div>

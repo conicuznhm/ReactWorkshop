@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import validator from 'validator';
 
-const InputToDo = ({ items, setItems }) => {
+const InputToDo = ({ handleAddItem }) => {
     const [newItem, setNewItem] = useState('');     // for input data
     const [error, setError] = useState('');
 
@@ -13,26 +13,18 @@ const InputToDo = ({ items, setItems }) => {
         if (validator.isEmpty(newItem, { ignore_whitespace: true })) {
             setError('To-Do List is required');
         } else {
-            setError('');
-            const tempArr = [...items];
-            tempArr.unshift({ id: uuidv4(), title: newItem, completed: false });
-            setItems(tempArr);
+            handleAddItem(newItem);
             setNewItem('');
+            setError('');
         }
     }
-
-    // action when user click 'Reset' button
-    const handleResetNewItem = () => setNewItem('');
-
-    // action when 'input' changed by user
-    const handleInputChange = (e) => setNewItem(e.target.value);
 
     return (
         <form onSubmit={handleSubmit}>
             <div className="input-group">
                 <input
                     className={`form-control ${error ? 'is-invalid' : ''}`}
-                    value={newItem} onChange={handleInputChange}
+                    value={newItem} onChange={(e) => setNewItem(e.target.value)}
                     placeholder='Enter your To-Do List'
                 />
 
@@ -43,7 +35,7 @@ const InputToDo = ({ items, setItems }) => {
                 <button
                     type='button'
                     className="btn btn-outline-secondary"
-                    onClick={handleResetNewItem}
+                    onClick={() => setNewItem('')}
                 >
                     <i className="fa-solid fa-xmark" />
                 </button>
