@@ -13,7 +13,7 @@ function App() {
   ];
 
   // state declaration
-  const [items, setItems] = useState(DefaultItems);     // for data base
+  const [items, setItems] = useState(DefaultItems);     // for database
   const [item, setItem] = useState('');                 // for input data
 
   // -----------------------------  
