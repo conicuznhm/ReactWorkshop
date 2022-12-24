@@ -65,13 +65,28 @@ function App() {
   }
   // --------------------------------------------------------------------------------------------
 
+  // ------------------------------ 
+  // --   for <FilterStatus />   --
+  // ------------------------------
+  const handleFilterItem = textFilter => {
+    console.log(textFilter);
+    if (textFilter === '') {
+      setShowItems(items);
+    } else {
+      const filter = (textFilter === 'done');
+      const searchItems = items.filter(item => item.completed === filter);
+      setShowItems(searchItems);
+    }
+  }
+  // --------------------------------------------------------------------------------------------
+
   return (
     <div className='container' style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo handleAddItem={handleAddItem} />
       <br />
       <SearchForm onChange={handleSearchItem} />
       <br />
-      <FilterStatus />
+      <FilterStatus onChange={handleFilterItem} />
       <br />
       <br />
 

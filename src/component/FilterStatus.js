@@ -1,9 +1,13 @@
 import { useState } from "react";
 
-const FilterStatus = () => {
-    const [filterStatus, setFilterStatus] = useState('all');
+const FilterStatus = ({onChange}) => {
+    const [filterStatus, setFilterStatus] = useState('');
 
-    const handleChangeFilter = (e) => e.target.checked && setFilterStatus(e.target.value);
+    const handleChangeFilter = (e) => {
+        onChange(e.target.value);
+        setFilterStatus(e.target.value);
+        // e.target.checked && setFilterStatus(e.target.value);
+    }
 
     return (
         <div className="btn-group" role="group">
@@ -12,8 +16,8 @@ const FilterStatus = () => {
                 className="btn-check"
                 name="btnradio"
                 id="btnradio1"
-                value='all'
-                checked={filterStatus === 'all'}
+                value=''
+                checked={filterStatus === ''}
                 onChange={handleChangeFilter}
             />
             <label className="btn btn-outline-secondary" htmlFor="btnradio1">
