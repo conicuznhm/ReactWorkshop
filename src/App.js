@@ -19,7 +19,7 @@ function App() {
   const [showItems, setShowItems] = useState(items);    // for database
 
   // conditon variable (search, filter, etc.)
-  const arrDisplayCondition = [{xxx: [1,3,5]}];
+  const [arrDisplayCondition, setArrDisplayCondition] = useState([]);
 
   // to update both state together
   const setAllState = (value) => {
@@ -36,9 +36,9 @@ function App() {
   }
 
   // to delete object's properties according to input array of [id]
-  const deleteProperties = (arrObj, arrIdToDelete) => {
+  const deleteProperties = (arrIdToDelete) => {
     if (arrIdToDelete.length !== 0) {
-      const tempObj = arrObj.reduce((acc, obj) => {
+      const tempObj = items.reduce((acc, obj) => {
         const idx = arrIdToDelete.findIndex(id => id === obj.id);
         if (idx === -1) {
           acc.push(obj)
@@ -50,9 +50,42 @@ function App() {
     return items;
   }
 
-  // --------------------------------------------------------------------------------------------
-  // -- main display ----------------------------------------------------------------------------
-  // --------------------------------------------------------------------------------------------
+  // to find id of item that need to be deleted
+  const findIdToDelete = (condition, key) => {
+    const arrIdToDelete = [];
+    switch (key) {
+      case 'search':
+        items.forEach(item => (condition !== '') && (item.title.toLowerCase().includes(condition.toLowerCase()) ? null : arrIdToDelete.push(item.id)));
+        break;
+      case 'status':
+        items.forEach(item => {
+          if (condition === 'done' && item.completed !== true) arrIdToDelete.push(item.id);
+          else if (condition === 'notDone' && item.completed !== false) arrIdToDelete.push(item.id);
+        });
+        break;
+    }
+    return arrIdToDelete;
+  }
+
+  // to update display condition to arrDisplayCondition
+  const updateConditionArr = (arrIdToDelete, key) => {
+    const arrKey = arrDisplayCondition.reduce((acc, obj) => {
+      acc.push(...Object.keys(obj));
+      return acc;
+    },[])
+
+    const tempArr = [...arrDisplayCondition]
+
+    if (arrKey.includes(key)) {   // already exist --> update
+      const idx = tempArr.findIndex(el => key in el);
+      tempArr[idx] = { ...tempArr[idx], [key]: arrIdToDelete }
+    } else {                      // not exist --> add
+      tempArr.push({ [key]: arrIdToDelete });
+    }
+    setArrDisplayCondition(tempArr);
+    return [...tempArr];
+  }
+
   // -----------------------------  
   // --    for <InputToDo />    --
   // -----------------------------
@@ -60,6 +93,23 @@ function App() {
     const nItem = { id: uuidv4(), title, completed: false }   // tile: tile === tile (short hand)
     setAllState([nItem, ...items]);
   }
+  // --------------------------------------------------------------------------------------------
+
+  // -- display conditions ----------------------------------------------------------------------
+  // ------------------------------ 
+  // --    for <SearchForm />    --
+  // ------------------------------
+  const handleSearchItem = search => {
+    setShowItems(deleteProperties(mergeArray(updateConditionArr(findIdToDelete(search, 'search'), 'search'))))
+  }
+  // ------------------------------ 
+  // --   for <FilterStatus />   --
+  // ------------------------------
+  const handleFilterItem = textFilter => {
+    setShowItems(deleteProperties(mergeArray(updateConditionArr(findIdToDelete(textFilter, 'status'), 'status'))))
+  }
+  // --------------------------------------------------------------------------------------------
+
   // -----------------------------  
   // --    for <ListItems />    --
   // -----------------------------
@@ -82,67 +132,7 @@ function App() {
     setShowItems(tempArrShow);                                              // update [showItems] with [tempArrShow]
   }
   // --------------------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------------------
-  // -- display conditions ----------------------------------------------------------------------
-  // --------------------------------------------------------------------------------------------
-  // ------------------------------ 
-  // --    for <SearchForm />    --
-  // ------------------------------
-  const findIdToDelete = (condition, key) => {
-    const arrIdToDelete = [];
-    switch (key) {
-      case 'search':
-        items.forEach(item => (condition !== '') && (item.title.toLowerCase().includes(condition.toLowerCase()) ? null : arrIdToDelete.push(item.id)));
-        break;
-      case 'status':
-        items.forEach(item => {
-          if (condition === 'done' && item.completed !== true) arrIdToDelete.push(item.id);
-          else if (condition === 'notDone' && item.completed !== false) arrIdToDelete.push(item.id);
-        });
-        // console.log(arrIdToDelete)
-        break;
-    }
-    return arrIdToDelete;
-  }
-
-  const updateConditionArr = (arrIdToDelete, key) => {
-    console.log(arrDisplayCondition)
-    console.log(arrDisplayCondition.length)
-    const idx = arrDisplayCondition.findIndex(el => key in el);
-    // console.log(idx)
-    if (arrDisplayCondition.length === 0) {   // not exist --> add
-      arrDisplayCondition.push({ [key]: arrIdToDelete });
-      console.log(arrDisplayCondition.length)
-    } else {            // already exist --> update
-      arrDisplayCondition[idx] = { ...arrDisplayCondition[idx], [key]: arrIdToDelete }
-    }
-  }
-
-  const handleSearchItem = search => {
-    updateConditionArr(findIdToDelete(search, 'search'), 'search')
-    console.log(arrDisplayCondition.length)
-    setShowItems(deleteProperties(showItems, mergeArray(arrDisplayCondition)))
-  }
-  // ------------------------------ 
-  // --   for <FilterStatus />   --
-  // ------------------------------
-  const handleFilterItem = textFilter => {
-    updateConditionArr(findIdToDelete(textFilter, 'status'), 'status')
-    console.log(textFilter);
-    // console.log(findIdToDelete(textFilter, 'status'));
-    // if (textFilter === '') {
-    //   setShowItems(items);
-    // } else {
-    //   const filter = (textFilter === 'done');
-    //   const searchItems = items.filter(item => item.completed === filter);
-    //   setShowItems(searchItems);
-    // }
-    // console.log(arrDisplayCondition)
-    setShowItems(deleteProperties(showItems, mergeArray(arrDisplayCondition)))
-  }
-  // --------------------------------------------------------------------------------------------
-
+  
   return (
     <div className='container' style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo handleAddItem={handleAddItem} />
