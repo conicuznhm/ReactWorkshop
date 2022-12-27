@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { useState, useEffect } from 'react'
-import { Axios } from 'axios'
+import axios from 'axios'
 import TodoForm from './component/TodoForm'
 import TotoItem from './component/TodoItem'
 import SearchForm from './component/Search'
@@ -9,11 +9,21 @@ const intData = []
 
 function App() {
   const [tasks, setTasks] = useState(intData)
-  const axios = require('axios')
+
+  const [search, setSearch] = useState('')
+  const [searchTime, setSearchTime] = useState(search)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchTime)
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  })
 
   useEffect(function () {
     axios.get('http://localhost:8080/todos').then(function (res) {
-      console.log(res.data)
+      // console.log(res.data)
       setTasks(res.data.todos)
     })
   }, [])
@@ -43,7 +53,7 @@ function App() {
     setTasks(newTaskfromUpdate)
   }
 
-  const [search, setSearch] = useState('')
+  // const [search, setSearch] = useState('')
 
   const filterTodos = tasks.filter(el =>
     el.title.toLowerCase().includes(search)
@@ -54,7 +64,11 @@ function App() {
       <TodoForm addTask={createTask} />
       <br />
 
-      <SearchForm setSearchP={setSearch} text={search} />
+      <SearchForm
+        setSearchTime={setSearchTime}
+        searchTime={searchTime}
+        text={search}
+      />
 
       <br />
       <ul className="list-group">
