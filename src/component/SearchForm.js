@@ -1,13 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const SearchForm = ({onChange}) => {
+const SearchForm = ({ onChange }) => {
     const [search, setSearch] = useState('');
 
     const handleChange = (e) => {
         const currentSearch = e.target.value.trim();
-        onChange(currentSearch);
-        setSearch(e.target.value);
+        // onChange(currentSearch);
+        setSearch(currentSearch);
     }
+
+    useEffect(() => {
+        let debounceTime;
+        if (search !== '') {
+            debounceTime = setTimeout(() => {
+                onChange(search);
+                console.log(search);
+            }, 1000);
+        } else {
+            onChange('');
+        }
+        return (() => {
+            console.log(search);
+            clearTimeout(debounceTime);
+        })
+    }, [search])
 
     const handleCancel = () => {
         onChange('');
