@@ -1,22 +1,35 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import InputToDo from './component/InputToDo';
 import ListItems from './component/ListItems';
 import SearchForm from './component/SearchForm';
 import FilterStatus from './component/FilterStatus';
+import axios from 'axios';
 
 function App() {
-  // defaul data
-  const DefaultItems = [
-    { id: uuidv4(), title: 'FreeCodeCamp Javascript', completed: false },
-    { id: uuidv4(), title: 'FreeCodeCamp HTML', completed: false },
-    { id: uuidv4(), title: 'FreeCodeCamp CSS', completed: true }
-  ];
 
   // state declaration
-  const [items, setItems] = useState(DefaultItems);     // for database
-  const [showItems, setShowItems] = useState(items);    // for database
+  const [items, setItems] = useState([]);     // for database
+  const [showItems, setShowItems] = useState([]);    // for database
+
+  // database -----------------------------------------------------------------------------------
+  const getDataFromDatabased = async () => {
+    const res = await axios.get('http://localhost:8080/todos')
+    setItems(res.data.todos)
+    setShowItems(res.data.todos)
+  }
+  useEffect(() => {
+    getDataFromDatabased()
+  }, [])
+
+  // // defaul data
+  // const DefaultItems = [
+  //   { id: uuidv4(), title: 'FreeCodeCamp Javascript', completed: false },
+  //   { id: uuidv4(), title: 'FreeCodeCamp HTML', completed: false },
+  //   { id: uuidv4(), title: 'FreeCodeCamp CSS', completed: true }
+  // ];
+  // --------------------------------------------------------------------------------------------
 
   // conditon variable (search, filter, etc.)
   const [arrDisplayCondition, setArrDisplayCondition] = useState([]);
@@ -72,7 +85,7 @@ function App() {
     const arrKey = arrDisplayCondition.reduce((acc, obj) => {
       acc.push(...Object.keys(obj));
       return acc;
-    },[])
+    }, [])
 
     const tempArr = [...arrDisplayCondition]
 
@@ -89,9 +102,11 @@ function App() {
   // -----------------------------  
   // --    for <InputToDo />    --
   // -----------------------------
-  const handleAddItem = (title) => {
+  const handleAddItem = async (title) => {
     const nItem = { id: uuidv4(), title, completed: false }   // tile: tile === tile (short hand)
-    setAllState([nItem, ...items]);
+    // add databased
+    const tempObj = await axios.post('http://localhost:8080/todos', nItem)
+    setAllState([tempObj.data.todo, ...items]);
   }
   // --------------------------------------------------------------------------------------------
 
@@ -117,6 +132,9 @@ function App() {
   const handleDelteItem = idToDelete => {
     const newItems = items.filter(item => item.id !== idToDelete);
     setAllState(newItems);
+
+    // delete databased
+    axios.delete(`http://localhost:8080/todos/${idToDelete}`)
   }
   // edit mode --- action when click 'Done' or 'Change' button
   const handleUpdateItem = (id, updateValue) => {
@@ -130,9 +148,12 @@ function App() {
 
     setItems(tempArr);                                                      // update [items] with [tempArr]
     setShowItems(tempArrShow);                                              // update [showItems] with [tempArrShow]
+
+    // update databased
+    axios.put(`http://localhost:8080/todos/${id}`, tempArr[idx])
   }
   // --------------------------------------------------------------------------------------------
-  
+
   return (
     <div className='container' style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo handleAddItem={handleAddItem} />
