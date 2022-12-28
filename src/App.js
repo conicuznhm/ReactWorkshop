@@ -12,6 +12,7 @@ function App() {
   // state declaration
   const [items, setItems] = useState([]);     // for database
   const [showItems, setShowItems] = useState([]);    // for database
+  const [trigger, setTrigger] = useState(false);  // for search, filter
 
   // database -----------------------------------------------------------------------------------
   const getDataFromDatabased = async () => {
@@ -38,6 +39,7 @@ function App() {
   const setAllState = (value) => {
     setItems(value);
     setShowItems(value);
+    setTrigger(!trigger);
   }
 
   // to merge array
@@ -103,7 +105,7 @@ function App() {
   // --    for <InputToDo />    --
   // -----------------------------
   const handleAddItem = async (title) => {
-    const nItem = { id: uuidv4(), title, completed: false }   // tile: tile === tile (short hand)
+    const nItem = { title, completed: false }   // don't need to include ID in obj, server will create for us
     // add databased
     const tempObj = await axios.post('http://localhost:8080/todos', nItem)
     setAllState([tempObj.data.todo, ...items]);
@@ -148,6 +150,7 @@ function App() {
 
     setItems(tempArr);                                                      // update [items] with [tempArr]
     setShowItems(tempArrShow);                                              // update [showItems] with [tempArrShow]
+    setTrigger(!trigger);
 
     // update databased
     axios.put(`http://localhost:8080/todos/${id}`, tempArr[idx])
@@ -158,9 +161,9 @@ function App() {
     <div className='container' style={{ width: '80%', margin: '50px auto' }}>
       <InputToDo handleAddItem={handleAddItem} />
       <br />
-      <SearchForm onChange={handleSearchItem} />
+      <SearchForm onChange={handleSearchItem} trigger={trigger} />
       <br />
-      <FilterStatus onChange={handleFilterItem} />
+      <FilterStatus onChange={handleFilterItem} trigger={trigger} />
       <br />
       <br />
 

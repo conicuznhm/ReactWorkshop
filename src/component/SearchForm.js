@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 
-const SearchForm = ({ onChange }) => {
+const SearchForm = ({ onChange, trigger }) => {
     const [search, setSearch] = useState('');
+
+    useEffect(() => {
+        onChange(search);
+    }, [trigger])
 
     const handleChange = (e) => {
         const currentSearch = e.target.value.trim();
@@ -14,13 +18,11 @@ const SearchForm = ({ onChange }) => {
         if (search !== '') {
             debounceTime = setTimeout(() => {
                 onChange(search);
-                console.log(search);
             }, 1000);
         } else {
             onChange('');
         }
         return (() => {
-            console.log(search);
             clearTimeout(debounceTime);
         })
     }, [search])

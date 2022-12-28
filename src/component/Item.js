@@ -22,8 +22,8 @@ const Item = ({ item, onClickDelete, onClickUpdateItem }) => {
     }
 
     // action when click confirm on edit mode
-    const handleUpdateFromEdit = () => {
-        onClickUpdateItem(item.id, { title: editItem });
+    const handleUpdateFromEdit = async () => {
+        await onClickUpdateItem(item.id, { title: editItem });
         handlerIsEdit();
     }
 
