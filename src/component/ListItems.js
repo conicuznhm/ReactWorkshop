@@ -1,13 +1,12 @@
 import Item from "./Item";
 
-const ListItems = ({ items, onClickDelete, onClickUpdateItem }) => {
+const ListItems = () => {
+    const dummy = ['Task 1', 'Task 2', 'Task 3']
     return (
         <div className="list-group">
-            {items.map(item => <Item
-                key={item.id}
+            {dummy.map((item, idx) => <Item
+                key={idx}
                 item={item}
-                onClickDelete={onClickDelete}
-                onClickUpdateItem={onClickUpdateItem}
             />)}
         </div>
     );

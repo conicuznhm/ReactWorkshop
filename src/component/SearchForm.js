@@ -1,34 +1,14 @@
 import { useEffect, useState } from "react";
 
-const SearchForm = ({ onChange, trigger }) => {
+const SearchForm = () => {
     const [search, setSearch] = useState('');
-
-    useEffect(() => {
-        onChange(search);
-    }, [trigger])
 
     const handleChange = (e) => {
         const currentSearch = e.target.value.trim();
-        // onChange(currentSearch);
         setSearch(currentSearch);
     }
 
-    useEffect(() => {
-        let debounceTime;
-        if (search !== '') {
-            debounceTime = setTimeout(() => {
-                onChange(search);
-            }, 1000);
-        } else {
-            onChange('');
-        }
-        return (() => {
-            clearTimeout(debounceTime);
-        })
-    }, [search])
-
     const handleCancel = () => {
-        onChange('');
         setSearch('');
     }
 

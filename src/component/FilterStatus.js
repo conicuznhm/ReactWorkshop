@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 
-const FilterStatus = ({ onChange, trigger }) => {
+const FilterStatus = () => {
     const [filterStatus, setFilterStatus] = useState('');
 
-    useEffect(() => {
-        onChange(filterStatus);
-    }, [trigger])
-
     const handleChangeFilter = (e) => {
-        onChange(e.target.value);
         setFilterStatus(e.target.value);
-        // e.target.checked && setFilterStatus(e.target.value);
     }
 
     return (
