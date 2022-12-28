@@ -1,49 +1,39 @@
 import { useState } from 'react';
-// import validator from 'validator';
+import validator from 'validator';
 import { useTodos } from '../context/TodosContext';
 
-const InputToDo = ({ handleAddItem }) => {
-
-    const [newItem, setNewItem] = useState('');     // for input data
+const InputToDo = () => {
+    // useContext: TodosContext
     const { addTodo } = useTodos();
 
-    // const [error, setError] = useState('');
+    // internal useState
+    const [error, setError] = useState('');
+    const [newItem, setNewItem] = useState('');     // for input data
 
-    // // action when submit (both click on 'Add' and press 'Enter')
-    // // ---> use [form + submit] instead of [onClick]
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();     // avoid refesh page after submitting
-    //     if (validator.isEmpty(newItem, { ignore_whitespace: true })) {
-    //         setError('To-Do List is required');
-    //     } else {
-    //         handleAddItem(newItem);
-    //         setNewItem('');
-    //         setError('');
-    //     }
-    // }
-    console.log(newItem)
-
-    const addNewItem = (e) => {
-        e.preventDefault();
-        addTodo(newItem);  
-        setNewItem('')
+    // action when submit (both click on 'Add' and press 'Enter')
+    // ---> use [form + submit] instead of [onClick]
+    const handleSubmit = (e) => {
+        e.preventDefault();     // avoid refesh page after submitting
+        if (validator.isEmpty(newItem, { ignore_whitespace: true })) {
+            setError('To-Do List is required');
+        } else {
+            addTodo(newItem);
+            setNewItem('');
+            setError('');
+        }
     }
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="input-group">
                 <input
-                    // className={`form-control ${error ? 'is-invalid' : ''}`}
-                    className={`form-control`}
+                    className={`form-control ${error ? 'is-invalid' : ''}`}
                     value={newItem}
                     onChange={(e) => setNewItem(e.target.value)}
                     placeholder='Enter your To-Do List'
                 />
 
-                <button
-                    className="btn btn-primary"
-                    onClick={addNewItem}
-                >
+                <button className="btn btn-primary" >
                     <i className="fa-solid fa-check" />
                 </button>
 

@@ -3,7 +3,8 @@ import { useTodos } from "../context/TodosContext";
 
 
 const ListItems = () => {
-    const {todos} = useTodos();
+    // useContext: TodosContext
+    const { todos } = useTodos();
 
     return (
         <div className="list-group">
