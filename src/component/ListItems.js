@@ -1,12 +1,15 @@
 import Item from "./Item";
+import { useTodos } from "../context/TodosContext";
+
 
 const ListItems = () => {
-    const dummy = ['Task 1', 'Task 2', 'Task 3']
+    const {todos} = useTodos();
+
     return (
         <div className="list-group">
-            {dummy.map((item, idx) => <Item
+            {todos.map((todo, idx) => <Item
                 key={idx}
-                item={item}
+                todo={todo}
             />)}
         </div>
     );

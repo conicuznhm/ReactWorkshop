@@ -1,18 +1,18 @@
 import { useState } from "react";
 
-const Item = ({ item }) => {
+const Item = ({ todo }) => {
     const [isEdit, setIsEdit] = useState(false);                        // for toggling between display and edit mode
-    const [editItem, setEditItem] = useState(item.title);               // for edit data
+    const [editItem, setEditItem] = useState(todo.title);               // for edit data
 
     // set status color due to current 'completed' status
-    const statusColor = item.completed ? 'success' : 'danger';
+    const statusColor = todo.completed ? 'success' : 'danger';
 
     // action when 'item' edited by user
     const handleEditItem = (e) => setEditItem(e.target.value);
 
     // item: display mode
     const displayItemMode = <div className="d-flex align-items-center">
-        <div className="flex-fill" role='button' >{item}</div>
+        <div className="flex-fill" role='button' >{todo.title}</div>
         <div className="btn-group">
             <button className="btn btn-outline-light" >
                 <i className="fa-solid fa-repeat" />

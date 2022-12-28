@@ -5,36 +5,18 @@ import InputToDo from './component/InputToDo';
 import ListItems from './component/ListItems';
 import SearchForm from './component/SearchForm';
 import FilterStatus from './component/FilterStatus';
-import axios from 'axios';
+
+
+import TodosContextProvider from './context/TodosContext';
 
 function App() {
 
   // state declaration
-  const [items, setItems] = useState([]);     // for database
-  const [showItems, setShowItems] = useState([]);    // for database
-
-  // database -----------------------------------------------------------------------------------
-  const getDataFromDatabased = async () => {
-    const res = await axios.get('http://localhost:8080/todos');
-    setItems(res.data.todos);
-    setShowItems(res.data.todos);
-    console.log(res.data.todos);
-  }
-  useEffect(() => {
-    getDataFromDatabased()
-  }, [])
-
-  // // defaul data
-  // const DefaultItems = [
-  //   { id: uuidv4(), title: 'FreeCodeCamp Javascript', completed: false },
-  //   { id: uuidv4(), title: 'FreeCodeCamp HTML', completed: false },
-  //   { id: uuidv4(), title: 'FreeCodeCamp CSS', completed: true }
-  // ];
-  // --------------------------------------------------------------------------------------------
 
   // -----------------------------  
   // --    for <InputToDo />    --
   // -----------------------------
+  
 
   // --------------------------------------------------------------------------------------------
 
@@ -57,6 +39,7 @@ function App() {
 
   return (
     <div className='container' style={{ width: '80%', margin: '50px auto' }}>
+    <TodosContextProvider>
       <InputToDo />
       <br />
       <SearchForm />
@@ -66,6 +49,7 @@ function App() {
       <br />
 
       <ListItems />
+    </TodosContextProvider>
     </div>
   );
 }
