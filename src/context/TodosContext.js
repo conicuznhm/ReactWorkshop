@@ -25,7 +25,6 @@ const TodosContextProvider = ({ children }) => {
     // get database -------------------------------------------------------------------------------
     const getDataFromDatabased = async () => {
         const res = await axios.get('http://localhost:8080/todos');
-        // console.log(res.data.todos);
         dispatch({ type: FETCH_DATABASED, todos: res.data.todos })
     }
     useEffect(() => {
