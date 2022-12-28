@@ -16,7 +16,8 @@ const SearchForm = () => {
         <div className="input-group">
             <input
                 className={`form-control`}
-                value={search} onChange={handleChange}
+                value={search}
+                onChange={handleChange}
                 placeholder='Search'
             />
 

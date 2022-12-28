@@ -10,24 +10,16 @@ const UPDATE_DATABASED = 'DELETE_DATABASED';
 
 const todosReducer = (state, action) => {
     switch (action.type) {
-        case FETCH_DATABASED:
-            return action.todos;
-        case ADD_DATABASED: {
-            return [action.todo, ...state];
-        }
-        case DELETE_DATABASED: {
-            return action.todos;
-        }
-        case UPDATE_DATABASED: {
-            return action.todos;
-        }
-        default:
-            return state;
+        case FETCH_DATABASED: return action.todos;
+        case ADD_DATABASED: return [action.todo, ...state];
+        case DELETE_DATABASED: return action.todos;
+        case UPDATE_DATABASED: return action.todos;
+        default: return state;
     }
 }
 
 const TodosContextProvider = ({ children }) => {
-
+    // useReducer
     const [todos, dispatch] = useReducer(todosReducer, []);
 
     // get database -------------------------------------------------------------------------------
@@ -60,7 +52,7 @@ const TodosContextProvider = ({ children }) => {
     const updateTodo = async (id, updateValue) => {
         const idx = todos.findIndex((el) => el.id === id)
         const tempTodos = [...todos]
-        tempTodos[idx] = {...tempTodos[idx], ...updateValue}
+        tempTodos[idx] = { ...tempTodos[idx], ...updateValue }
         await axios.put(`http://localhost:8080/todos/${id}`, tempTodos[idx])
         dispatch({ type: UPDATE_DATABASED, todos: tempTodos })
     }
